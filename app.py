@@ -8,11 +8,16 @@ def index():
     account_number = request.form['account-number']
     pin = request.form['pin']
 
-    account = Account(account_number=account_number, pin=pin)
-    all_accounts = account.query.all()
-    for accounts in all_accounts:
-        print(accounts.id, accounts.account_number, accounts.pin)
+    account = Account.query.filter_by(account_number=account_number).first()
+    if account.pin == int(pin):
+      return redirect(url_for('menu', account_number=account_number) )
 
+    # account = Account(account_number=account_number, pin=pin)
+    # all_accounts = account.query.all()
+    # for accounts in all_accounts:
+    #   if account_number == accounts.account_number and pin == accounts.pin:
+    #     return redirect('deposit.html')
+        
     # account = Account(account_number, pin)
     # print( account.get() )
 
@@ -22,5 +27,5 @@ def index():
 
 @app.route('/menu/<int:account_number>/')
 def menu(account_number):
-  # balance = ...... a vous de trouver la balance avec SQL
-  return render_template('menu.html', balance=balance)
+  account = Account.query.filter_by(account_number=account_number).first()
+  return render_template('menu.html', balance=account.balance, account_number=account_number)
