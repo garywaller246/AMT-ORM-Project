@@ -17,6 +17,7 @@ def generate_pin_number():
 
 
 def generate_balance():
+    
     return random.randint(0,10000)
 
 
